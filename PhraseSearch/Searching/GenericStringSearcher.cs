@@ -35,10 +35,12 @@ namespace PhraseSearch.Searching
 
             foreach (var searchTerm in searchTerms)
             {
+                searchTermPosition++;
+
+                if (searchTerm.Length < _depth) continue;
+
                 var s = searchTerm.ToLowerInvariant();
                 var key = s.Substring(0, _depth);
-
-                searchTermPosition++;
 
                 if (!index.ContainsKey(key)) continue;
 
