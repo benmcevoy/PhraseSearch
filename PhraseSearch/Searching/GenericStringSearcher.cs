@@ -34,13 +34,16 @@ namespace PhraseSearch.Searching
             foreach (var searchTerm in searchTerms)
             {
                 searchTermPosition++;
-                var s = searchTerm.ToLowerInvariant();
 
+                var s = searchTerm.ToLowerInvariant();
                 var current = index;
                 var notFound = false;
+                var termLength = s.Length;
 
-                foreach (var key in s.Select(t => t.ToString(CultureInfo.InvariantCulture)))
+                for (var i = 0; i < termLength; i++)
                 {
+                    var key = s[i].ToString(CultureInfo.InvariantCulture);
+                    
                     if (!current.Indexer.ContainsKey(key))
                     {
                         notFound = true;
@@ -56,7 +59,8 @@ namespace PhraseSearch.Searching
                 }
             }
 
-            return _accumulator.Accumulate(results)
+            return _accumulator
+                .Accumulate(results)
                 .OrderByDescending(hit => hit.Score);
         }
 

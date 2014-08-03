@@ -4,7 +4,7 @@
     {
         public float Score(int searchTermPosition, IHitItem<T> searchHit)
         {
-            return 1f / searchTermPosition * 1f / searchHit.TermPosition;
+            return searchHit.Depth * 1f / searchTermPosition * 1f / searchHit.TermPosition;
         }
     }
 }

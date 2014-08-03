@@ -2,7 +2,7 @@
 
 namespace PhraseSearch.Scoring
 {
-    public interface IScorer<T>
+    public interface IScorer<in T>
     {
         Single Score(int searchTermPosition, IHitItem<T> searchHit);
     }

@@ -34,6 +34,8 @@ namespace PhraseSearch.Indexing
                     var key = keyToIndex[depth].ToString(CultureInfo.InvariantCulture);
                     var index = GetIndexForDepth(keyToIndex, depth, rootIndex);
 
+                    sortedTerm.Depth = depth;
+
                     if (index.Indexer.ContainsKey(key))
                     {
                         index.Indexer[key].Items.Add(sortedTerm);
@@ -48,7 +50,7 @@ namespace PhraseSearch.Indexing
             return rootIndex;
         }
 
-        private Index<string, T> GetIndexForDepth(string keyToIndex, int depth, Index<string, T> index)
+        private static Index<string, T> GetIndexForDepth(string keyToIndex, int depth, Index<string, T> index)
         {
             if (string.IsNullOrWhiteSpace(keyToIndex)) return index;
             if (keyToIndex.Length < depth) return index;

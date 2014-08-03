@@ -13,6 +13,8 @@
 
         public int TermPosition { get; private set; }
 
+        public int Depth { get; set; }
+
         public T Document { get; private set; }
     }
 }

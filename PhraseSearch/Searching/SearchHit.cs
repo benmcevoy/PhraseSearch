@@ -8,9 +8,12 @@
             Score = score;
             Term = hitItem.Term;
             TermPosition = hitItem.TermPosition;
+            Depth = hitItem.Depth;
         }
 
         public T Document { get; private set; }
+
+        public int Depth { get; private set; }
 
         public string Term { get; private set; }
 

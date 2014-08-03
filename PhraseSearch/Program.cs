@@ -13,13 +13,13 @@ namespace PhraseSearch
     {
         static void Main(string[] args)
         {
-            var documents = CreateDocuments();
+            var documents = CreateDocuments().ToList();
 
-            const int indexDepth = 3;
+            const int indexDepth = 5;
 
             var sw = new Stopwatch();
 
-            Console.WriteLine("creating index (1 million documents)...");
+            Console.WriteLine("creating index - {0} documents...", documents.Count());
 
             sw.Start();
 
@@ -36,10 +36,14 @@ namespace PhraseSearch
                 new GenericScorer<Document>(),
                 new DocumentAccumulator());
 
-            var hits = searcher.Search(new[] { "acade", "go" }, index);
+            var searchTerms = new[] {"Acade", "patr"};
+
+            Console.WriteLine("search for {0}, {1}", searchTerms);
+
+            var hits = searcher.Search(searchTerms, index);
 
             var results = hits
-                .Take(100)
+                .Take(10)
                 .ToList();
 
             sw.Stop();
