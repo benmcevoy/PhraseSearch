@@ -6,13 +6,13 @@ using System.Text.RegularExpressions;
 
 namespace PhraseSearch.Indexing
 {
-    public class GenericStringIndexer<T> : IIndexer<string, T>
+    public class StringIndexer<T> : IIndexer<string, T>
     {
         private readonly string[] _splitOn = { " " };
         private readonly Func<T, string> _termSelector;
         private readonly int _depth;
 
-        public GenericStringIndexer(Func<T, string> phraseSelector, int depth)
+        public StringIndexer(Func<T, string> phraseSelector, int depth)
         {
             _termSelector = phraseSelector;
             _depth = depth;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using PhraseSearch.Indexing;
@@ -6,7 +7,7 @@ using PhraseSearch.Scoring;
 
 namespace PhraseSearch.Searching
 {
-    public class GenericStringSearcher<T> : ISearcher<string, T>
+    public class StringSearcher<T> : ISearcher<string, T>
     {
         private readonly IScorer<T> _scorer;
         private readonly IAccumulator<T> _accumulator;
@@ -16,7 +17,7 @@ namespace PhraseSearch.Searching
         /// </summary>
         /// <param name="scorer"></param>
         /// <param name="accumulator"></param>
-        public GenericStringSearcher(IScorer<T> scorer, IAccumulator<T> accumulator)
+        public StringSearcher(IScorer<T> scorer, IAccumulator<T> accumulator)
         {
             _scorer = scorer;
             _accumulator = accumulator;
@@ -71,7 +72,7 @@ namespace PhraseSearch.Searching
                 searchTermPosition++;
 
                 var key = searchTerm.ToLowerInvariant();
-
+                
                 for (var i = key.Length; i > 0; i--)
                 {
                     var targetKey = key.Substring(0, i);
@@ -90,8 +91,9 @@ namespace PhraseSearch.Searching
 
         private IEnumerable<SearchHit<T>> SearchImpl(string searchTerm, int searchTermPosition, IEnumerable<IndexItem<T>> indexItems)
         {
+            // StringComparison.Ordinal improves performance
             return indexItems
-                .Where(indexItem => indexItem.Term.StartsWith(searchTerm))
+                .Where(indexItem => indexItem.Term.StartsWith(searchTerm, StringComparison.Ordinal))
                 .Select(indexItem => new SearchHit<T>(_scorer.Score(searchTermPosition, indexItem), indexItem));
         }
     }

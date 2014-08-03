@@ -50,14 +50,14 @@
     <Compile Include="Indexing\FlatIndex.cs" />
     <Compile Include="Indexing\FannedIndex.cs" />
     <Compile Include="Indexing\IIndexer.cs" />
-    <Compile Include="Indexing\GenericStringIndexer.cs" />
+    <Compile Include="Indexing\StringIndexer.cs" />
     <Compile Include="Indexing\IndexItem.cs" />
     <Compile Include="IAccumulator.cs" />
     <Compile Include="Scoring\IScorer.cs" />
     <Compile Include="Searching\ISearcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Searching\GenericStringSearcher.cs" />
+    <Compile Include="Searching\StringSearcher.cs" />
     <Compile Include="Scoring\GenericScorer.cs" />
     <Compile Include="Searching\SearchHit.cs" />
   </ItemGroup>

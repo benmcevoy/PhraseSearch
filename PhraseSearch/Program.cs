@@ -25,7 +25,7 @@ namespace PhraseSearch
 
             sw.Start();
 
-            var index = new GenericStringIndexer<Document>(document => document.Phrase, indexDepth).FlatIndex(documents);
+            var index = new StringIndexer<Document>(document => document.Phrase, indexDepth).FlatIndex(documents);
 
             sw.Stop();
 
@@ -33,7 +33,7 @@ namespace PhraseSearch
 
             sw.Restart();
 
-            var searcher = new GenericStringSearcher<Document>(
+            var searcher = new StringSearcher<Document>(
                 new GenericScorer<Document>(),
                 new DocumentAccumulator());
 
