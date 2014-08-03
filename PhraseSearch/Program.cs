@@ -15,7 +15,7 @@ namespace PhraseSearch
         {
             var documents = CreateDocuments().ToList();
 
-            const int indexDepth = 5;
+            const int indexDepth = 4;
 
             var sw = new Stopwatch();
 
@@ -36,7 +36,7 @@ namespace PhraseSearch
                 new GenericScorer<Document>(),
                 new DocumentAccumulator());
 
-            var searchTerms = new[] {"Acade", "patr"};
+            var searchTerms = new[] {"academ", "Patr"};
 
             Console.WriteLine("search for {0}, {1}", searchTerms);
 

@@ -37,26 +37,27 @@ namespace PhraseSearch.Searching
 
                 var s = searchTerm.ToLowerInvariant();
                 var current = index;
+                var previous = index;
                 var notFound = false;
                 var termLength = s.Length;
 
                 for (var i = 0; i < termLength; i++)
                 {
                     var key = s[i].ToString(CultureInfo.InvariantCulture);
-                    
+
                     if (!current.Indexer.ContainsKey(key))
                     {
                         notFound = true;
                         break;
                     }
 
+                    previous = current;
                     current = current.Indexer[key];
                 }
 
-                if (!notFound)
-                {
-                    results.AddRange(SearchImpl(s, searchTermPosition, current.Items));
-                }
+                results.AddRange(notFound
+                    ? SearchImpl(s, searchTermPosition, previous.Items)
+                    : SearchImpl(s, searchTermPosition, current.Items));
             }
 
             return _accumulator

@@ -29,7 +29,7 @@ namespace PhraseSearch.Indexing
 
                 for (var depth = 0; depth < _depth; depth++)
                 {
-                    if (keyToIndex.Length < depth) break;
+                    if (keyToIndex.Length <= depth) break;
 
                     var key = keyToIndex[depth].ToString(CultureInfo.InvariantCulture);
                     var index = GetIndexForDepth(keyToIndex, depth, rootIndex);
@@ -85,11 +85,9 @@ namespace PhraseSearch.Indexing
 
                 foreach (var term in terms)
                 {
-                    if (term.Length < _depth) continue;
-
                     var cleanTerm = Clean(term);
 
-                    if (cleanTerm.Length < _depth) continue;
+                    if (string.IsNullOrWhiteSpace(cleanTerm)) continue;
 
                     termPosition++;
                     indexItems.Add(new IndexItem<T>(document, term, termPosition));
