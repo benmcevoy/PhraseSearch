@@ -12,6 +12,8 @@ namespace PhraseSearch.Indexing
     /// each dictionary "bucket"
     /// 2) a more efficient and a lot simpler implementation would be a "MultiDictionary" or "MultiHashMap"
     /// 3) even better would be a MultiKeyDictionary...  where a, ap, app all mapped to app... but that seems unpossible:)
+    /// 
+    /// is it possible to have multi key with some kind of freaky GetHash()?
     /// </remarks>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
