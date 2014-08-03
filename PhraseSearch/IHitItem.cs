@@ -1,6 +1,6 @@
 ﻿namespace PhraseSearch
 {
-    public interface IHitItem<T>
+    public interface IHitItem<out T>
     {
         string Term { get; }
         int TermPosition { get; }

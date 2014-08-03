@@ -15,7 +15,7 @@ namespace PhraseSearch
         {
             var documents = CreateDocuments();
 
-            const int keyDepth = 3;
+            const int indexDepth = 3;
 
             var sw = new Stopwatch();
 
@@ -23,7 +23,7 @@ namespace PhraseSearch
 
             sw.Start();
 
-            var index = new GenericStringIndexer<Document>(document => document.Phrase, keyDepth).Index(documents);
+            var index = new GenericStringIndexer<Document>(document => document.Phrase, indexDepth).Index(documents);
 
             sw.Stop();
 
@@ -31,15 +31,15 @@ namespace PhraseSearch
 
             sw.Restart();
 
-            var searcher = new GenericStringSearcher<Document>(keyDepth,
-                (phraseTerm, searchTerm) => phraseTerm.StartsWith(searchTerm),
+            var searcher = new GenericStringSearcher<Document>(
+                (phraseTerm, searchTerm) => phraseTerm.StartsWith(searchTerm, StringComparison.Ordinal),
                 new GenericScorer<Document>(),
                 new DocumentAccumulator());
 
-            var hits = searcher.Search(new[] { "parad", "par" }, index);
+            var hits = searcher.Search(new[] { "acade", "go" }, index);
 
             var results = hits
-                .Take(10)
+                .Take(100)
                 .ToList();
 
             sw.Stop();

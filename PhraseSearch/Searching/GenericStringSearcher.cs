@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using PhraseSearch.Indexing;
 using PhraseSearch.Scoring;
@@ -8,7 +9,6 @@ namespace PhraseSearch.Searching
 {
     public class GenericStringSearcher<T> : ISearcher<string, T>
     {
-        private readonly int _depth;
         private readonly Func<string, string, bool> _matchPredicate;
         private readonly IScorer<T> _scorer;
         private readonly IAccumulator<T> _accumulator;
@@ -16,13 +16,11 @@ namespace PhraseSearch.Searching
         /// <summary>
         /// Search strings
         /// </summary>
-        /// <param name="depth"></param>
         /// <param name="matchPredicate">A predicate to compare two terms</param>
         /// <param name="scorer"></param>
         /// <param name="accumulator"></param>
-        public GenericStringSearcher(int depth, Func<string, string, bool> matchPredicate, IScorer<T> scorer, IAccumulator<T> accumulator)
+        public GenericStringSearcher(Func<string, string, bool> matchPredicate, IScorer<T> scorer, IAccumulator<T> accumulator)
         {
-            _depth = depth;
             _matchPredicate = matchPredicate;
             _scorer = scorer;
             _accumulator = accumulator;
@@ -36,15 +34,26 @@ namespace PhraseSearch.Searching
             foreach (var searchTerm in searchTerms)
             {
                 searchTermPosition++;
-
-                if (searchTerm.Length < _depth) continue;
-
                 var s = searchTerm.ToLowerInvariant();
-                var key = s.Substring(0, _depth);
 
-                if (!index.ContainsKey(key)) continue;
+                var current = index;
+                var notFound = false;
 
-                results.AddRange(SearchImpl(s, searchTermPosition, index[key].IndexItems));
+                foreach (var key in s.Select(t => t.ToString(CultureInfo.InvariantCulture)))
+                {
+                    if (!current.Indexer.ContainsKey(key))
+                    {
+                        notFound = true;
+                        break;
+                    }
+
+                    current = current.Indexer[key];
+                }
+
+                if (!notFound)
+                {
+                    results.AddRange(SearchImpl(s, searchTermPosition, current.Items));
+                }
             }
 
             return _accumulator.Accumulate(results)

@@ -5,7 +5,7 @@
         public IndexItem(T document, string term, int termPosition)
         {
             Document = document;
-            Term = term;
+            Term = term.ToLower();
             TermPosition = termPosition;
         }
 

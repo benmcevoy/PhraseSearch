@@ -47,10 +47,9 @@
     <Compile Include="Document.cs" />
     <Compile Include="DocumentAccumulator.cs" />
     <Compile Include="IHitItem.cs" />
-    <Compile Include="Indexing\StringIndex.cs" />
-    <Compile Include="Indexing\IIndexer.cs" />
-    <Compile Include="Indexing\GenericIndexer.cs" />
     <Compile Include="Indexing\Index.cs" />
+    <Compile Include="Indexing\IIndexer.cs" />
+    <Compile Include="Indexing\GenericStringIndexer.cs" />
     <Compile Include="Indexing\IndexItem.cs" />
     <Compile Include="IAccumulator.cs" />
     <Compile Include="Scoring\IScorer.cs" />
