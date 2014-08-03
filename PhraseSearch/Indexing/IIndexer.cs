@@ -4,6 +4,8 @@ namespace PhraseSearch.Indexing
 {
     public interface IIndexer<TKey, TValue>
     {
-        Index<TKey, TValue> Index(IEnumerable<TValue> documents);
+        FannedIndex<TKey, TValue> FannedIndex(IEnumerable<TValue> documents);
+
+        FlatIndex<TKey, TValue> FlatIndex(IEnumerable<TValue> documents);
     }
 }

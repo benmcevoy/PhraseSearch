@@ -18,9 +18,9 @@ namespace PhraseSearch.Indexing
             _depth = depth;
         }
 
-        public Index<string, T> Index(IEnumerable<T> documents)
+        public FannedIndex<string, T> FannedIndex(IEnumerable<T> documents)
         {
-            var rootIndex = new Index<string, T>("root", 26);
+            var rootIndex = new FannedIndex<string, T>("root", 26);
             var sortedTerms = GetTerms(documents);
 
             foreach (var sortedTerm in sortedTerms)
@@ -42,7 +42,7 @@ namespace PhraseSearch.Indexing
                         continue;
                     }
 
-                    index.Indexer[key] = new Index<string, T>(key, 26);
+                    index.Indexer[key] = new FannedIndex<string, T>(key, 26);
                     index.Indexer[key].Items.Add(sortedTerm);
                 }
             }
@@ -50,7 +50,37 @@ namespace PhraseSearch.Indexing
             return rootIndex;
         }
 
-        private static Index<string, T> GetIndexForDepth(string keyToIndex, int depth, Index<string, T> index)
+        public FlatIndex<string, T> FlatIndex(IEnumerable<T> documents)
+        {
+            var index = new FlatIndex<string, T>(1024);
+            var sortedTerms = GetTerms(documents);
+
+            foreach (var sortedTerm in sortedTerms)
+            {
+                var keyToIndex = sortedTerm.Term;
+
+                for (var depth = 0; depth < _depth; depth++)
+                {
+                    if (keyToIndex.Length <= depth) break;
+
+                    var key = keyToIndex.Substring(0, depth);
+
+                    sortedTerm.Depth = depth;
+
+                    if (index.ContainsKey(key))
+                    {
+                        index[key].Add(sortedTerm);
+                        continue;
+                    }
+
+                    index[key] = new List<IndexItem<T>>(256) { sortedTerm };
+                }
+            }
+
+            return index;
+        }
+
+        private static FannedIndex<string, T> GetIndexForDepth(string keyToIndex, int depth, FannedIndex<string, T> index)
         {
             if (string.IsNullOrWhiteSpace(keyToIndex)) return index;
             if (keyToIndex.Length < depth) return index;
@@ -63,7 +93,7 @@ namespace PhraseSearch.Indexing
 
                 if (!current.Indexer.ContainsKey(key))
                 {
-                    current.Indexer[key] = new Index<string, T>(key, 26);
+                    current.Indexer[key] = new FannedIndex<string, T>(key, 26);
                 }
 
                 current = current.Indexer[key];

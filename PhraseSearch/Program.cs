@@ -15,6 +15,8 @@ namespace PhraseSearch
         {
             var documents = CreateDocuments().ToList();
 
+            // could be docu.count log(26)
+            // depth is 26^depth sized index worst case
             const int indexDepth = 4;
 
             var sw = new Stopwatch();
@@ -23,7 +25,7 @@ namespace PhraseSearch
 
             sw.Start();
 
-            var index = new GenericStringIndexer<Document>(document => document.Phrase, indexDepth).Index(documents);
+            var index = new GenericStringIndexer<Document>(document => document.Phrase, indexDepth).FlatIndex(documents);
 
             sw.Stop();
 
@@ -32,7 +34,6 @@ namespace PhraseSearch
             sw.Restart();
 
             var searcher = new GenericStringSearcher<Document>(
-                (phraseTerm, searchTerm) => phraseTerm.StartsWith(searchTerm, StringComparison.Ordinal),
                 new GenericScorer<Document>(),
                 new DocumentAccumulator());
 
